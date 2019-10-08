@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="category">
+
+	<insert id="default_insert">
+	<![CDATA[
+	insert into category 
+	values(null,"이름","설명",now(),#{blog_id });
+	]]>
+	</insert>
+
+</mapper>
