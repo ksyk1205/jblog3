@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import kr.co.itcen.jblog.repository.BlogDao;
 import kr.co.itcen.jblog.repository.CategoryDao;
 import kr.co.itcen.jblog.repository.UserDao;
-import kr.co.itcen.jblog.vo.BlogVo;
 import kr.co.itcen.jblog.vo.UserVo;
 
 @Service
@@ -21,8 +20,6 @@ public class UserService {
 	//회원가입을 위한 insert
 	public void join(UserVo vo) {
 		userDao.insert(vo);
-		
-		
 		//회원가입했을 때 블로그 추가 
 		blogDao.insert(vo.getId());
 		

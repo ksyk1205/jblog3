@@ -18,7 +18,7 @@
 		<h1 class="logo">JBlog</h1>
 		<c:import url="/WEB-INF/views/includes/menu.jsp" />
 		<form class="login-form" method="post"
-			 action="${pageContext.servletContext.contextPath }/user/login">
+			 action="${pageContext.servletContext.contextPath }/user/auth">
 			
 			<label>아이디</label> 
 			<input type="text" name="id"> 

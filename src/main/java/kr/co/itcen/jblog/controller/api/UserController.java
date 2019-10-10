@@ -14,7 +14,7 @@ import kr.co.itcen.jblog.service.UserService;
 public class UserController {
 	@Autowired
 	private UserService userService;
-	
+	//id 중복체크 
 	@ResponseBody
 	@RequestMapping("/checkid")
 	public JSONResult checkId(@RequestParam(value="id",required=true,defaultValue="")String id) {
