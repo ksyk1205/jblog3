@@ -12,6 +12,17 @@
 	values(#{id },concat(#{id },'의 블로그 입니다.'),'/assets/images/spring-logo.jpg');
 	]]>
 	</insert>
+	
+	<select id="getId" parameterType="String" resultType="blogvo">
+	<![CDATA[
+	 	select id ,title ,logo 
+	 	from blog 
+	 	where id = #{id } 
+ 	]]> 
+	</select>
+
+
+	
 
 
 </mapper>

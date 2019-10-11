@@ -5,11 +5,22 @@
 
 <mapper namespace="category">
 
-	<insert id="default_insert">
+	<insert id="default_insert" parameterType="String">
 	<![CDATA[
 	insert into category 
 	values(null,"이름","설명",now(),#{blog_id });
 	]]>
 	</insert>
-
+	
+	<select id="getId" parameterType="String" resultType="categoryvo">
+	<![CDATA[
+	select no,
+		name,
+		description,
+		date_format(reg_date, '%Y-%m-%d %h:%i:%s') as reg_date,
+		blog_id
+	from category
+	where blog_id= #{blog_id}
+	]]>
+	</select>
 </mapper>

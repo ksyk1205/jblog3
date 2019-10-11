@@ -41,5 +41,7 @@ public class CategoryVo {
 		return "CategoryVo [no=" + no + ", name=" + name + ", description=" + description + ", reg_date=" + reg_date
 				+ ", blog_id=" + blog_id + "]";
 	}
+
+	
 	
 }

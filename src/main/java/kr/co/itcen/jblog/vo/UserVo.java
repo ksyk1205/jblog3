@@ -9,6 +9,8 @@ public class UserVo {
 	private String name;
 	private String password;
 	private String reg_date;
+	
+
 	public String getId() {
 		return id;
 	}

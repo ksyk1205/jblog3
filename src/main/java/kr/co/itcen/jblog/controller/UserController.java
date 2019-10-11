@@ -40,12 +40,6 @@ public class UserController {
 	}
 	
 	
-	@RequestMapping(value="/joinsuccess", method=RequestMethod.GET)
-	public String joinsuccess() {
-		return "redirect:/user/joinsuccess";
-	}
-	
-	
 	@RequestMapping(value="/login", method=RequestMethod.GET)
 	public String login(@ModelAttribute UserVo vo) {
 		

@@ -6,8 +6,6 @@ import org.springframework.stereotype.Repository;
 
 import kr.co.itcen.jblog.vo.BlogVo;
 
-
-
 @Repository
 public class BlogDao {
 	@Autowired
@@ -16,6 +14,11 @@ public class BlogDao {
 	public Boolean insert(String id) {
 		int count = sqlSession.insert("blog.insert" , id);
 		return count==1;
+	}
+	
+	public  BlogVo get(String id) {
+		BlogVo reasult = sqlSession.selectOne("blog.getId",id);
+		return reasult;	
 	}
 
 
