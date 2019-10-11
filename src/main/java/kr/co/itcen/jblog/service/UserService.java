@@ -22,7 +22,6 @@ public class UserService {
 		userDao.insert(vo);
 		//회원가입했을 때 블로그 추가 
 		blogDao.insert(vo.getId());
-		
 		//회원가입했을 때 default 값 카테고리 추가 
 		categoryDao.default_insert(vo.getId());
 	}

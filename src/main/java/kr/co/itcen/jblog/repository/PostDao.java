@@ -8,6 +8,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import kr.co.itcen.jblog.vo.CategoryVo;
 import kr.co.itcen.jblog.vo.PostVo;
 
 @Repository
@@ -22,10 +23,20 @@ public class PostDao {
 
 	public PostVo getPost(Long postNo, Long categoryno) {
 		Map<String, Long>map = new HashMap<String, Long>();
-		map.put("postNo",postNo);
-		map.put("categoryno",categoryno);
+		map.put("no",postNo);
+		map.put("category_no",categoryno);
 		PostVo vo = sqlSession.selectOne("post.getpost",map);
 		return vo;
+	}
+
+	public Boolean insertpost(PostVo vo) {
+		int count =sqlSession.insert("post.insertpost",vo);
+		return count==1;
+	}
+
+	public void delpost(Long categoryno) {
+		sqlSession.delete("post.delpost",categoryno);
+		
 	}
 
 }

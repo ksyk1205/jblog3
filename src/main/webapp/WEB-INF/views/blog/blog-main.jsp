@@ -29,7 +29,7 @@
 						<c:forEach items="${postlist }" var='postvo'>
 							<li>
 							<a
-							href="${pageContext.request.contextPath}/${meid}/${postvo.category_no}/${postvo.no}">${postvo.title}
+							href="${pageContext.request.contextPath}/${id}/${postvo.category_no}/${postvo.no}">${postvo.title}
 							</a> <span>${postvo.reg_date }</span></li>
 						</c:forEach>
 					</ul>
@@ -41,7 +41,7 @@
 		<div id="extra">
 			<div class="blog-logo">
 				<img
-					src="${pageContext.request.contextPath}/assets/images/spring-logo.jpg">
+					src="${pageContext.request.contextPath}${blogvo.logo}">
 			</div>
 		</div>
 

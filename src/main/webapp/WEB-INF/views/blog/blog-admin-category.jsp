@@ -8,18 +8,85 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>JBlog</title>
 <Link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/jblog.css">
+<script src="${pageContext.servletContext.contextPath }/assets/js/jquery/jquery-1.9.0.js" type="text/javascript"></script>
 </head>
+<script>
+	$(function() {
+		$('#category-add-btn').on('click', function() {
+			let category = {
+				name: $('#category-name').val(),
+				description: $('#category-description').val()
+			}
+			
+			$.ajax({
+				url: '${pageContext.servletContext.contextPath }/api/${authUser.id}/category',
+				method: 'post',
+				data: category,
+				success: function(response) {
+					console.log(response)
+					if (response.result == 'success') {
+						// 화면에 추가
+						addCategory(response.data)
+						// input clear
+					}
+				},
+				error: function() {
+					console.log('error')
+				}
+			})	
+		})
+		
+		$('.category-remove-btn').on('click', removeCategory)
+		
+		
+		function addCategory(category) {
+			console.log('category:', category)
+			let trTag = $('<tr/>').attr('id', 'cid-' + category.no)
+				.append($('<td/>').text(category.no))
+				.append($('<td/>').text(category.name))
+				.append($('<td/>').text(category.count))
+				.append($('<td/>').text(category.description))
+				.append($('<td/>').append(
+						$('<img/>').attr('src', '${pageContext.request.contextPath}/assets/images/delete.jpg').attr('category-no', category.no)
+						.on('click', removeCategory).addClass('category-remove-btn')))
+			
+			$('#category-table').append(trTag)
+		}
+		
+		function removeCategory(event) {
+		
+			no= $(event.target).attr('category-no')
+			console.log(no)
+		
+			$.ajax({
+				url: '${pageContext.servletContext.contextPath }/api/${authUser.id}/removecategory?no='+no,
+				method: 'get',
+				data: no,
+				success: function(response) {
+					if (response.result != 'success') {
+						console.log('remove error')
+					}
+					console.log(response.result)
+					$('#category-table tr').remove('#cid-'+no)
+				},
+				error: function() {
+					console.log('remove error')
+				}
+			})
+		}
+	})
+	
+	
+	
+</script>
+
 <body>
 	<div id="container">
 		<c:import url="/WEB-INF/views/includes/header.jsp" />
 		<div id="wrapper">
 			<div id="content" class="full-screen">
-				<ul class="admin-menu">
-					<li><a href="">기본설정</a></li>
-					<li class="selected">카테고리</li>
-					<li><a href="">글작성</a></li>
-				</ul>
-		      	<table class="admin-cat">
+				<c:import url="/WEB-INF/views/includes/admin-menu.jsp"/>
+		      	<table class="admin-cat" id="category-table">
 		      		<tr>
 		      			<th>번호</th>
 		      			<th>카테고리명</th>
@@ -27,42 +94,30 @@
 		      			<th>설명</th>
 		      			<th>삭제</th>      			
 		      		</tr>
-					<tr>
-						<td>3</td>
-						<td>미분류</td>
-						<td>10</td>
-						<td>카테고리를 지정하지 않은 경우</td>
-						<td><img src="${pageContext.request.contextPath}/assets/images/delete.jpg"></td>
-					</tr>  
-					<tr>
-						<td>2</td>
-						<td>스프링 스터디</td>
-						<td>20</td>
-						<td>어쩌구 저쩌구</td>
-						<td><img src="${pageContext.request.contextPath}/assets/images/delete.jpg"></td>
+		      		<c:forEach items="${catelist}" var="catevo">
+					<tr id="cid-${catevo.no }">
+						<td>${catevo.no }</td>
+						<td>${catevo.name }</td>
+						<td>${catevo.count }</td>
+						<td>${catevo.description}</td>
+						<td><img class="category-remove-btn" src="${pageContext.request.contextPath}/assets/images/delete.jpg" category-no="${catevo.no }"></td>
 					</tr>
-					<tr>
-						<td>1</td>
-						<td>스프링 프로젝트</td>
-						<td>15</td>
-						<td>어쩌구 저쩌구</td>
-						<td><img src="${pageContext.request.contextPath}/assets/images/delete.jpg"></td>
-					</tr>					  
+					</c:forEach>  					  
 				</table>
       	
       			<h4 class="n-c">새로운 카테고리 추가</h4>
 		      	<table id="admin-cat-add">
 		      		<tr>
 		      			<td class="t">카테고리명</td>
-		      			<td><input type="text" name="name"></td>
+		      			<td><input type="text" name="name" id="category-name"></td>
 		      		</tr>
 		      		<tr>
 		      			<td class="t">설명</td>
-		      			<td><input type="text" name="desc"></td>
+		      			<td><input type="text" name="description" id="category-description"></td>
 		      		</tr>
 		      		<tr>
 		      			<td class="s">&nbsp;</td>
-		      			<td><input type="submit" value="카테고리 추가"></td>
+		      			<td><input type="button" value="카테고리 추가" id="category-add-btn"></td>
 		      		</tr>      		      		
 		      	</table> 
 			</div>

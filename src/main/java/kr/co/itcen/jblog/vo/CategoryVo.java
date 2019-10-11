@@ -6,6 +6,14 @@ public class CategoryVo {
 	private String description;
 	private String reg_date;
 	private String blog_id;
+	
+	private Long count;
+	public Long getCount() {
+		return count;
+	}
+	public void setCount(Long count) {
+		this.count = count;
+	}
 	public Long getNo() {
 		return no;
 	}

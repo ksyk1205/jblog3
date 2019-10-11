@@ -62,24 +62,31 @@ $(function(){
 	<div class="center-content">
 		<h1 class="logo">JBlog</h1>
 	<c:import url="/WEB-INF/views/includes/menu.jsp" />
-		<form:form 
-			modelAttribute="userVo" 
-			class="join-form" 
-			id="join-form" 
-			method="post" 
+		<form:form modelAttribute="userVo" class="join-form" id="join-form"
+			method="post"
 			action="${pageContext.servletContext.contextPath }/user/join">
-			
-			<label class="block-label" for="name">이름</label>
-			<form:input path="name"/>
-			
-			<label class="block-label" for="blog-id">아이디</label>
-			<form:input path="id"/>
-			<input id="btn-check-id" type="button" value="id 중복체크">
-			<img id="img-check" style='width:20px; display:none'
-					 src="${pageContext.request.contextPath}/assets/images/check.png">
 
+			<label class="block-label" for="name">이름</label>
+			<form:input path="name" />
+			<p
+				style="font-weight: bold; color: red; text-align: left; padding: 5px 0 0 0">
+				<form:errors path="name" />
+			</p>
+
+			<label class="block-label" for="blog-id">아이디</label>
+			<form:input path="id" />
+			<input id="btn-check-id" type="button" value="id 중복체크">
+			<img id="img-check" style='width: 20px; display: none'
+				src="${pageContext.request.contextPath}/assets/images/check.png">
+			<p style="font-weight: bold; color: red; text-align: left; padding: 5px 0 0 0">
+				<form:errors path="id" />
+			</p>
+				
 			<label class="block-label" for="password">패스워드</label>
 			<input id="password" name="password" type="password" />
+			<p style="font-weight: bold; color: red; text-align: left; padding: 5px 0 0 0">
+				<form:errors path="password" />
+			</p>
 
 			<fieldset>
 				<legend>약관동의</legend>

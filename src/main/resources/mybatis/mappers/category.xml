@@ -8,7 +8,7 @@
 	<insert id="default_insert" parameterType="String">
 	<![CDATA[
 	insert into category 
-	values(null,"이름","설명",now(),#{blog_id });
+	values(null,"default_name","default_description",now(),#{blog_id });
 	]]>
 	</insert>
 	
@@ -21,6 +21,38 @@
 		blog_id
 	from category
 	where blog_id= #{blog_id}
+	]]>
+	</select>
+	
+	<insert id="addcategory" parameterType="categoryvo">
+	<![CDATA[
+	insert into category 
+	values(null,#{name},#{description},now(),#{blog_id});
+	]]>
+	<selectKey keyProperty="no" resultType="long">
+	<![CDATA[
+		select last_insert_id()
+	]]>
+	</selectKey>
+	</insert>
+	
+	<delete id="delcategory" parameterType="long">
+	<![CDATA[
+	 delete from category 
+	 where no= #{no }
+	]]>
+	</delete>
+	
+	<select id="postcount" parameterType="String" resultType="categoryvo">
+	<![CDATA[
+	select count(post.no) as count,
+			category.no as no ,
+			category.name as name,
+			category.description as description
+	from category left join post
+		on category.no = post.category_no
+	where category.blog_id = #{id}
+	group by category.no
 	]]>
 	</select>
 </mapper>

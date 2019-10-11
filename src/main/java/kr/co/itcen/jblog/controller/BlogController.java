@@ -8,35 +8,40 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import kr.co.itcen.jblog.service.BlogService;
 import kr.co.itcen.jblog.vo.BlogVo;
 import kr.co.itcen.jblog.vo.CategoryVo;
 import kr.co.itcen.jblog.vo.PostVo;
+import kr.co.itcen.jblog.vo.UserVo;
 
 
 //1)jblog3/id
 //2)jblog3/id/pathNo1//카테고리 링크
 //3)jblog3/id/pathNo1/pathNo2 // post링크
 @Controller
-@RequestMapping("/{id:(?!assets).*}")//assets밑에 있는 파일제외하고 받는다
+@RequestMapping("/{id:(?!assets)(?!images).*}")//assets,images가 아닌 것들만 id에 맵핑
 public class BlogController {
 	
 	@Autowired
 	private BlogService blogService;
+	
+
 	
 	@RequestMapping( {"", "/{pathNo1}", "/{pathNo1}/{pathNo2}" } )
 	public String index( 
 		@PathVariable String id,
 		@PathVariable Optional<Long> pathNo1,
 		@PathVariable Optional<Long> pathNo2,
-		Model model) {
+		Model model, UserVo vo) {
 		
 		
 		List<CategoryVo> list = blogService.getList(id);
 		model.addAttribute("list",list);
 		
-		System.out.println(list.get(0));
 		
 		Long categoryno= list.get(0).getNo();//[0][1][2]...
 		//리스트에 1번쨰 category
@@ -72,12 +77,68 @@ public class BlogController {
 		model.addAttribute("postvo",postvo);
 		model.addAttribute("id",id);
 		
-		if(id.equals(blogvo.getId()))
+		System.out.println(vo.getId());
+		
+		if(id.equals(vo.getId()))
 			model.addAttribute("isMe",true);
 		
 		return "blog/blog-main";
 	}
-
+	//자기 자신 블로그 기본 관리 화면 
+	@RequestMapping("/admin/basic")
+	public String blogmanagement(@PathVariable String id ,Model model){
+		BlogVo vo =	blogService.get(id);
+		
+		model.addAttribute("blogvo", vo);
+		
+		return "blog/blog-admin-basic";
+		
+	}
+	//블로그 기본관리 화면에서 title과 logo수정 
+	@RequestMapping(value="/admin/basic",method = RequestMethod.POST )
+	public String blogmanagement(
+			@RequestParam(value="logo-file",required=false) MultipartFile multipartFile,
+			@PathVariable String id, 
+			BlogVo vo){//파일 파라미터 받고 title받고
+						//서비스호출,파일 업로드한 URL을 db에 저장
+		vo.setId(id);
+		blogService.update(multipartFile,vo);
+		return "redirect:/"+id;
+		
+	}
+	
+	//블로그 기본 관리 화면에서 카테고리 수정 
+	@RequestMapping("/admin/category")
+	public String categorymanagement(@PathVariable String id, Model model) {
+		List<CategoryVo> catelist = blogService.getcatelist(id);
+		model.addAttribute("catelist",catelist);
+		
+		BlogVo vo =	blogService.get(id);
+		model.addAttribute("blogvo", vo);
+		return "blog/blog-admin-category";
+		
+	}
+	
+	//블로그 기본관리 화면에서 포스트 작성 
+	@RequestMapping("/admin/write")
+	public String  write(@PathVariable String id, Model model) {
+		List<CategoryVo> catevo = blogService.getList(id);
+		model.addAttribute("catevo",catevo);
+		BlogVo vo =	blogService.get(id);
+		
+		model.addAttribute("blogvo", vo);
+		return "blog/blog-admin-write";
+	}
+	
+	//카테고리 no에 포스트 작성
+	@RequestMapping(value="/admin/write",method = RequestMethod.POST)
+	public String write(@PathVariable String id , PostVo vo , @RequestParam("category") Long no) {
+		
+		vo.setCategory_no(no);
+		blogService.insertpost(vo);
+		
+		return "redirect:/"+id;
+	}
 }
 
 

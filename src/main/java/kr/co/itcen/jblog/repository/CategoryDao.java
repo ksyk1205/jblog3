@@ -24,4 +24,20 @@ public class CategoryDao {
 		return list;
 	}
 
+	public int addcategory(CategoryVo categoryvo) {
+		return sqlSession.insert("category.addcategory", categoryvo);
+	}
+
+	public Boolean delcategory(Long categoryno) {
+		int count = sqlSession.delete("category.delcategory",categoryno);
+		return count ==1;
+	}
+
+	public List<CategoryVo> getcatelist(String id) {
+		return sqlSession.selectList("category.postcount",id);
+	}
+	
+
+
+
 }
