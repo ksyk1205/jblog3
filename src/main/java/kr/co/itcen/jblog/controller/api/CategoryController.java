@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,11 +33,11 @@ public class CategoryController {
 		 return JSONResult.success(categoryvo);
 	 }
 	//category 제거 하기 
-	@RequestMapping(value = "/removecategory")
+	@RequestMapping(value = "/removecategory", method = RequestMethod.POST)
 	@ResponseBody
-	public JSONResult delcategory(@PathVariable String id,@RequestParam("no")Long no) {
-		System.out.println(no);
-		Boolean exist=blogService.delcategory(no);
+	public JSONResult delcategory(CategoryVo vo) {
+		System.out.println(vo);
+		Boolean exist=blogService.delcategory(vo.getNo());
 		
 		return JSONResult.success(exist);
 				

@@ -35,7 +35,6 @@
 	
 
 	<mvc:annotation-driven>
-		
 		<mvc:argument-resolvers>
 			<bean class="kr.co.itcen.jblog.security.AuthUserHandlerMethodArgumentResolver"></bean>
 		</mvc:argument-resolvers>

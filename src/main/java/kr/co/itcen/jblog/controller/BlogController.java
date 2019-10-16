@@ -18,10 +18,6 @@ import kr.co.itcen.jblog.vo.CategoryVo;
 import kr.co.itcen.jblog.vo.PostVo;
 import kr.co.itcen.jblog.vo.UserVo;
 
-
-//1)jblog3/id
-//2)jblog3/id/pathNo1//카테고리 링크
-//3)jblog3/id/pathNo1/pathNo2 // post링크
 @Controller
 @RequestMapping("/{id:(?!assets)(?!images).*}")//assets,images가 아닌 것들만 id에 맵핑
 public class BlogController {
@@ -29,8 +25,11 @@ public class BlogController {
 	@Autowired
 	private BlogService blogService;
 	
-
 	
+	
+	//1)jblog3/id
+	//2)jblog3/id/pathNo1//카테고리 링크
+	//3)jblog3/id/pathNo1/pathNo2 // post링크
 	@RequestMapping( {"", "/{pathNo1}", "/{pathNo1}/{pathNo2}" } )
 	public String index( 
 		@PathVariable String id,
@@ -41,14 +40,14 @@ public class BlogController {
 		
 		List<CategoryVo> list = blogService.getList(id);
 		model.addAttribute("list",list);
-		
-		
-		Long categoryno= list.get(0).getNo();//[0][1][2]...
-		//리스트에 1번쨰 category
+		Long categoryno= 0L;
+		if(!list.isEmpty()) {
+			categoryno= list.get(0).getNo();//[0][1][2]...
+		}
 		
 		Long postNo = 0L;
 		
-		//2,3일떄만 동작
+		//2),3)일떄만 동작
 		if(pathNo2.isPresent()) { //pathNo2가 존재할 때  
 			categoryno=pathNo1.get(); 
 			postNo=pathNo2.get();
@@ -78,6 +77,7 @@ public class BlogController {
 		model.addAttribute("id",id);
 		
 		System.out.println(vo.getId());
+		
 		
 		if(id.equals(vo.getId()))
 			model.addAttribute("isMe",true);

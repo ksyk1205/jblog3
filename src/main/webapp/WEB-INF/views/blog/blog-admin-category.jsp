@@ -54,20 +54,21 @@
 		}
 		
 		function removeCategory(event) {
-		
-			no= $(event.target).attr('category-no')
-			console.log(no)
+			let category={
+				no: $(event.target).attr('category-no')
+			}
+			console.log(category.no)
 		
 			$.ajax({
-				url: '${pageContext.servletContext.contextPath }/api/${authUser.id}/removecategory?no='+no,
-				method: 'get',
-				data: no,
+				url: '${pageContext.servletContext.contextPath }/api/${authUser.id}/removecategory',
+				method: 'post',
+				data: category,
 				success: function(response) {
 					if (response.result != 'success') {
 						console.log('remove error')
 					}
 					console.log(response.result)
-					$('#category-table tr').remove('#cid-'+no)
+					$('#category-table tr').remove('#cid-'+category.no)
 				},
 				error: function() {
 					console.log('remove error')
